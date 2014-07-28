@@ -61,14 +61,15 @@ for i=1:6,
 end 
 linkaxes(h, 'xy')
 
-%% Filter out objects below a given size
-size = 200
+%% Filter out objects by size
+size_min = 200;
+size_max = 2000;
 [L, n] = bwlabel(imfill(e{6}, 'holes'), 4);
 j = 0;
 for i=1:n,
     s = sum(sum(L==i)); %number of pixels in object
-    if s < size
-        L(find(L==i)) = 0;
+    if s < size_min | s > size_max
+        L(find(L==i)) = 0; %set mask values to zero
     else
         j = j+ 1;
     end
