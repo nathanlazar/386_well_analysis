@@ -19,6 +19,26 @@ for i=1:4,
 end
 linkaxes(h, 'xy') %allows to zoom images together
 
+%% Naive segmentation of nuclei
+figure;
+h(1) = subplot(2,2,1); 
+imshow(dapi); title('DAPI')
+h(2) = subplot(2,2,2);
+seg2 = dapi>=1500;
+imshow(seg2); title('pixels above 1500')
+h(3) = subplot(2,2,3);
+seg2 = dapi>=15000;
+imshow(seg2); title('pixels above 15000')
+h(4) = subplot(2,2,4); 
+seg1 = dapi==65535;
+imshow(seg1); title('pixels at max')
+
+linkaxes(h, 'xy')
+
+%%
+hist(double(reshape(dapi, 1, 1024*1344)),200);
+%%
+q = quantile(single(reshape(dapi, 1, 1024*1344)), 200)
 %% Denoise (using median filter)
 for j=1:4,    
     figure;
