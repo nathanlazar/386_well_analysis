@@ -19,10 +19,36 @@ for i=1:4,
 end
 linkaxes(h, 'xy') %allows to zoom images together
 
-%% Naive segmentation of nuclei
+%% Naive segmentation
+figure;
+for i=1:4,
+    h(i) = subplot(2,2,i);
+    hist(double(reshape(image{i}, 1, 1024*1344)),200);
+    title(name{i});
+end
+linkaxes(h, 'xy')
+
+for i=1:4,
+    figure;
+    h(1) = subplot(2,2,1); 
+    imshow(image{i}); title(name{i});
+    h(2) = subplot(2,2,2);
+    seg2 = image{i} >= 1500;
+    imshow(seg2); title('pixels above 1500');
+    h(3) = subplot(2,2,3);
+    seg2 = image{i} >= 15000;
+    imshow(seg2); title('pixels above 15000');
+    h(4) = subplot(2,2,4); 
+    seg1 = dapi==65535;
+    imshow(seg1); title('pixels at max');
+    linkaxes(h, 'xy');
+end
+%% Naive segmentation of cells (Alexa 568)
+figure;
+hist(double(reshape(alexa568, 1, 1024*1344)),200);
 figure;
 h(1) = subplot(2,2,1); 
-imshow(dapi); title('DAPI')
+imshow(alexa568); title('Alexa 568')
 h(2) = subplot(2,2,2);
 seg2 = dapi>=1500;
 imshow(seg2); title('pixels above 1500')
@@ -34,9 +60,8 @@ seg1 = dapi==65535;
 imshow(seg1); title('pixels at max')
 
 linkaxes(h, 'xy')
-
 %%
-hist(double(reshape(dapi, 1, 1024*1344)),200);
+quantile(single(reshape(alexa568, 1, 1024*1344)), 10)
 %%
 q = quantile(single(reshape(dapi, 1, 1024*1344)), 200)
 %% Denoise (using median filter)
