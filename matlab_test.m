@@ -172,3 +172,21 @@ for i=1:4,
     title(name{i});
 end
 linkaxes(h, 'xy') %allows to zoom images together
+
+%% Use DBScan to find objects
+% we first need to translate pixels above a certain threshold into points
+% w/ x,y as their coordinates
+filt = dapi > 2500;
+filt = filt(200:400,200:400)
+figure;
+imshow(filt);
+[x,y] = ind2sub(size(filt), find(filt));
+%%
+[C, ptsC, centres] = dbscan([x,y]', 3, 10);
+%%
+figure;
+scatter(centres(2,:), 200-centres(1,:),'blue','filled');
+hold on;
+%imshow(filt(C{1}))
+%scatter(centres(1,:), centres(2,:), 'red'); %just testing, changes these to the points from ptsC
+hold off;
